@@ -9,6 +9,11 @@ public class Rocket : MonoBehaviour
 
     AudioSource audioData;
 
+    [SerializeField] float rcsThrust = 250f;
+
+    [SerializeField] float mainThrust = 4500f;
+
+    public ConstantForce gravity;
 
     Renderer rendSpace;
     Renderer rendA;
@@ -34,6 +39,12 @@ public class Rocket : MonoBehaviour
         spaceKeyMaterial = spaceKeyObject.GetComponent<Renderer>().material;
         aKeyMaterial = aKeyObject.GetComponent<Renderer>().material;
         dKeyMaterial = dKeyObject.GetComponent<Renderer>().material;
+
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
+
+        gravity = gameObject.AddComponent<ConstantForce>();
+        gravity.force = new Vector3(0.0f, -40f, 0.0f);
+
     }
 
     // Update is called once per frame
@@ -51,6 +62,8 @@ public class Rocket : MonoBehaviour
 
         rocketRigidBody.freezeRotation = true;
 
+        float rotationSpeed = rcsThrust * Time.deltaTime;
+
         if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
         {
             print("Can't Rotate Both Ways at The Same Time!");
@@ -60,19 +73,22 @@ public class Rocket : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            print("Left Rotation Pressed!");
+            transform.Rotate(Vector3.forward * rotationSpeed);
+
+            //print("Left Rotation Pressed!");
             aKeyMaterial.color = Color.red;
             dKeyMaterial.color = Color.white;
-
-            transform.Rotate(Vector3.forward);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            print("Right Rotation Pressed!");
+
+            //print("Right Rotation Pressed!");
             dKeyMaterial.color = Color.red;
             aKeyMaterial.color = Color.white;
 
-            transform.Rotate(-Vector3.forward);
+            
+
+            transform.Rotate(-Vector3.forward * rotationSpeed);
 
         }
         else
@@ -87,10 +103,13 @@ public class Rocket : MonoBehaviour
 
     private void getThrust()
     {
+
+        float mainThrustSpeed = mainThrust * Time.deltaTime;
+
         if (Input.GetKey(KeyCode.Space))
         {
             //print("Space Pressed!");
-            rocketRigidBody.AddRelativeForce(Vector3.up);
+            rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
 
             if (!audioData.isPlaying)
             {
