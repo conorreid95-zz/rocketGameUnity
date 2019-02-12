@@ -11,7 +11,7 @@ public class Rocket : MonoBehaviour
 
     [SerializeField] float rcsThrust = 250f;
 
-    [SerializeField] float mainThrust = 4500f;
+    [SerializeField] float mainThrust = 4200f;
 
     public ConstantForce gravity;
 
@@ -43,7 +43,7 @@ public class Rocket : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().useGravity = false;
 
         gravity = gameObject.AddComponent<ConstantForce>();
-        gravity.force = new Vector3(0.0f, -40f, 0.0f);
+        gravity.force = new Vector3(0.0f, -35f, 0.0f);
 
     }
 
@@ -56,6 +56,21 @@ public class Rocket : MonoBehaviour
     }
 
 
+    private void OnCollisionEnter(Collision collision) //executes on collision with another gameobject
+    {
+        switch(collision.gameObject.tag) //switch on tag of object the rocket has collided with
+        {
+            case "Friendly":
+                print("Collided with friendly object");
+                break;
+
+            default:
+                print("Collided with dangerous object");
+                break;
+
+        }
+
+    }
 
     private void getRotation()
     {
