@@ -7,6 +7,8 @@ public class Rocket : MonoBehaviour
 {
     Rigidbody rocketRigidBody;
 
+    AudioSource audioData;
+
 
     Renderer rendSpace;
     Renderer rendA;
@@ -23,8 +25,7 @@ public class Rocket : MonoBehaviour
     {
         rocketRigidBody = GetComponent<Rigidbody>();
 
-
-
+        audioData = GetComponent<AudioSource>();
 
 
         rendSpace = spaceKeyObject.GetComponent<Renderer>();
@@ -38,25 +39,17 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessInput();
-        
+        getThrust();
+
+        getRotation();
     }
 
 
 
-    private void ProcessInput()
+    private void getRotation()
     {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            //print("Space Pressed!");
-            rocketRigidBody.AddRelativeForce(Vector3.up);
 
-            spaceKeyMaterial.color = Color.red;
-        }
-        else
-        {
-            spaceKeyMaterial.color = Color.white;
-        }
+        rocketRigidBody.freezeRotation = true;
 
         if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
         {
@@ -71,13 +64,16 @@ public class Rocket : MonoBehaviour
             aKeyMaterial.color = Color.red;
             dKeyMaterial.color = Color.white;
 
-
+            transform.Rotate(Vector3.forward);
         }
-        else if(Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
             print("Right Rotation Pressed!");
             dKeyMaterial.color = Color.red;
             aKeyMaterial.color = Color.white;
+
+            transform.Rotate(-Vector3.forward);
+
         }
         else
         {
@@ -85,6 +81,29 @@ public class Rocket : MonoBehaviour
             dKeyMaterial.color = Color.white;
         }
 
+        rocketRigidBody.freezeRotation = false;
+
+    }
+
+    private void getThrust()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            //print("Space Pressed!");
+            rocketRigidBody.AddRelativeForce(Vector3.up);
+
+            if (!audioData.isPlaying)
+            {
+                audioData.Play(0);
+            }
+
+            spaceKeyMaterial.color = Color.red;
+        }
+        else
+        {
+            spaceKeyMaterial.color = Color.white;
+            audioData.Pause();
+        }
     }
 }
 
