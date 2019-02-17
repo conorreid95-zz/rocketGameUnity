@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
@@ -63,9 +64,24 @@ public class Rocket : MonoBehaviour
             case "Friendly":
                 print("Collided with friendly object");
                 break;
+            case "LaunchPad":
+                print("Collided with launch pad");
+                break;
+            case "LandingPad":
+                print("Collided with landing pad");
+                SceneManager.LoadScene(1);
+                break;
 
             default:
-                print("Collided with dangerous object");
+                print("Dead");
+                if(SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    SceneManager.LoadScene(0);
+                }
+                else if(SceneManager.GetActiveScene().buildIndex == 1)
+                {
+                    SceneManager.LoadScene(1);
+                }
                 break;
 
         }
