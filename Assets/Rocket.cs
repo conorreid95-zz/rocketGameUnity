@@ -11,8 +11,15 @@ public class Rocket : MonoBehaviour
     AudioSource audioData;
 
     [SerializeField] float rcsThrust = 250f;
-
     [SerializeField] float mainThrust = 4200f;
+
+    [SerializeField] AudioClip mainEngineSound;
+    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip victorySound;
+
+    [SerializeField] ParticleSystem mainEngineParticle;
+    [SerializeField] ParticleSystem deathParticle;
+    [SerializeField] ParticleSystem victoryParticle;
 
     public ConstantForce gravity;
 
@@ -25,6 +32,12 @@ public class Rocket : MonoBehaviour
     public GameObject spaceKeyObject;
     public GameObject aKeyObject;
     public GameObject dKeyObject;
+
+    enum State { Alive, Dying, Trancending }
+
+    State state = State.Alive;
+
+    //bool ControlEnabled = true;
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +72,9 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //executes on collision with another gameobject
     {
-        switch(collision.gameObject.tag) //switch on tag of object the rocket has collided with
+        if(state != State.Alive) { return; }
+
+        switch (collision.gameObject.tag) //switch on tag of object the rocket has collided with
         {
             case "Friendly":
                 print("Collided with friendly object");
@@ -69,23 +84,47 @@ public class Rocket : MonoBehaviour
                 break;
             case "LandingPad":
                 print("Collided with landing pad");
-                SceneManager.LoadScene(1);
+                state = State.Trancending;
+                audioData.Stop();
+                victoryParticle.Play();
+                audioData.PlayOneShot(victorySound);
+                Invoke("LoadNextLevel", 1f);
                 break;
-
             default:
                 print("Dead");
-                if(SceneManager.GetActiveScene().buildIndex == 0)
-                {
-                    SceneManager.LoadScene(0);
-                }
-                else if(SceneManager.GetActiveScene().buildIndex == 1)
-                {
-                    SceneManager.LoadScene(1);
-                }
+                state = State.Dying;
+                audioData.Stop();
+                deathParticle.Play();
+                audioData.PlayOneShot(deathSound);
+                //ControlEnabled = false;
+                Invoke("LoadCurrentLevel", 1f);
                 break;
 
         }
 
+    }
+
+    private void LoadCurrentLevel()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            SceneManager.LoadScene(0);
+            state = State.Alive;
+            // ControlEnabled = true;
+        }
+        else if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            SceneManager.LoadScene(1);
+            state = State.Alive;
+            //ControlEnabled = true;
+        }
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1);
+        state = State.Alive;
+        //ControlEnabled = true;
     }
 
     private void getRotation()
@@ -95,38 +134,42 @@ public class Rocket : MonoBehaviour
 
         float rotationSpeed = rcsThrust * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+        if (state == State.Alive)
         {
-            print("Can't Rotate Both Ways at The Same Time!");
-            aKeyMaterial.color = Color.white;
-            dKeyMaterial.color = Color.white;
+            if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+            {
+                print("Can't Rotate Both Ways at The Same Time!");
+                aKeyMaterial.color = Color.white;
+                dKeyMaterial.color = Color.white;
 
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(Vector3.forward * rotationSpeed);
+
+                //print("Left Rotation Pressed!");
+                aKeyMaterial.color = Color.red;
+                dKeyMaterial.color = Color.white;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+
+                //print("Right Rotation Pressed!");
+                dKeyMaterial.color = Color.red;
+                aKeyMaterial.color = Color.white;
+
+
+
+                transform.Rotate(-Vector3.forward * rotationSpeed);
+
+            }
+            else
+            {
+                aKeyMaterial.color = Color.white;
+                dKeyMaterial.color = Color.white;
+            }
         }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(Vector3.forward * rotationSpeed);
-
-            //print("Left Rotation Pressed!");
-            aKeyMaterial.color = Color.red;
-            dKeyMaterial.color = Color.white;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-
-            //print("Right Rotation Pressed!");
-            dKeyMaterial.color = Color.red;
-            aKeyMaterial.color = Color.white;
-
-            
-
-            transform.Rotate(-Vector3.forward * rotationSpeed);
-
-        }
-        else
-        {
-            aKeyMaterial.color = Color.white;
-            dKeyMaterial.color = Color.white;
-        }
+        
 
         rocketRigidBody.freezeRotation = false;
 
@@ -137,22 +180,28 @@ public class Rocket : MonoBehaviour
 
         float mainThrustSpeed = mainThrust * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.Space))
+        if (state == State.Alive)
         {
-            //print("Space Pressed!");
-            rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
-
-            if (!audioData.isPlaying)
+            if (Input.GetKey(KeyCode.Space))
             {
-                audioData.Play(0);
-            }
+                //print("Space Pressed!");
+                rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
 
-            spaceKeyMaterial.color = Color.red;
-        }
-        else
-        {
-            spaceKeyMaterial.color = Color.white;
-            audioData.Pause();
+                mainEngineParticle.Play();
+
+                if (!audioData.isPlaying)
+                {
+                    audioData.PlayOneShot(mainEngineSound);
+                }
+
+                spaceKeyMaterial.color = Color.red;
+            }
+            else
+            {
+                spaceKeyMaterial.color = Color.white;
+                mainEngineParticle.Stop();
+                audioData.Pause();
+            }
         }
     }
 }
