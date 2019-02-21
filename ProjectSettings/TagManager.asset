@@ -8,6 +8,7 @@ TagManager:
   - DangerObject
   - LandingPad
   - LaunchPad
+  - BackgroundMusic
   layers:
   - Default
   - TransparentFX
