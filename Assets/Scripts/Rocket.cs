@@ -20,24 +20,18 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem mainEngineParticle;
     [SerializeField] ParticleSystem deathParticle;
     [SerializeField] ParticleSystem victoryParticle;
+    [SerializeField] ParticleSystem rightBoostParticle;
+    [SerializeField] ParticleSystem leftBoostParticle;
 
     public ConstantForce gravity;
-
-    Renderer rendSpace;
-    Renderer rendA;
-    Renderer rendD;
-    Material spaceKeyMaterial;
-    Material aKeyMaterial;
-    Material dKeyMaterial;
-    public GameObject spaceKeyObject;
-    public GameObject aKeyObject;
-    public GameObject dKeyObject;
 
     enum State { Alive, Dying, Trancending }
 
     State state = State.Alive;
 
-    float levelLoadDelay = 1f;
+    float levelLoadDelay = 1.5f;
+
+    bool invincable = false;
 
     //bool ControlEnabled = true;
 
@@ -47,14 +41,6 @@ public class Rocket : MonoBehaviour
         rocketRigidBody = GetComponent<Rigidbody>();
 
         audioData = GetComponent<AudioSource>();
-
-
-        rendSpace = spaceKeyObject.GetComponent<Renderer>();
-        rendA = aKeyObject.GetComponent<Renderer>();
-        rendD = dKeyObject.GetComponent<Renderer>();
-        spaceKeyMaterial = spaceKeyObject.GetComponent<Renderer>().material;
-        aKeyMaterial = aKeyObject.GetComponent<Renderer>().material;
-        dKeyMaterial = dKeyObject.GetComponent<Renderer>().material;
 
         gameObject.GetComponent<Rigidbody>().useGravity = false;
 
@@ -66,9 +52,9 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        getThrust();
-
-        getRotation();
+        CheckDebugKeys();
+        SetThrust();
+        SetRotation();
     }
 
 
@@ -79,13 +65,10 @@ public class Rocket : MonoBehaviour
         switch (collision.gameObject.tag) //switch on tag of object the rocket has collided with
         {
             case "Friendly":
-                print("Collided with friendly object");
                 break;
             case "LaunchPad":
-                print("Collided with launch pad");
                 break;
             case "LandingPad":
-                print("Collided with landing pad");
                 state = State.Trancending;
                 audioData.Stop();
                 victoryParticle.Play();
@@ -93,15 +76,24 @@ public class Rocket : MonoBehaviour
                 Invoke("LoadNextLevel", levelLoadDelay);
                 break;
             default:
-                print("Dead");
-                state = State.Dying;
-                audioData.Stop();
-                deathParticle.Play();
-                audioData.PlayOneShot(deathSound);
-                //ControlEnabled = false;
-                Invoke("LoadCurrentLevel", levelLoadDelay);
-                break;
+                if (invincable)
+                {
+                    break;
+                }
+                else
+                {
+                    state = State.Dying;
+                    audioData.Stop();
+                    deathParticle.Play();
 
+                    if (rightBoostParticle.isPlaying) { rightBoostParticle.Stop(); }
+                    if (leftBoostParticle.isPlaying) { leftBoostParticle.Stop(); }
+
+                    audioData.PlayOneShot(deathSound);
+                    //ControlEnabled = false;
+                    Invoke("LoadCurrentLevel", levelLoadDelay);
+                    break;
+                }
         }
 
     }
@@ -129,55 +121,62 @@ public class Rocket : MonoBehaviour
         //ControlEnabled = true;
     }
 
-    private void getRotation()
+
+
+    private void SetRotation()
     {
 
-        rocketRigidBody.freezeRotation = true;
+        rocketRigidBody.freezeRotation = true; //freeze rotation before applying calculated rotation
 
         float rotationSpeed = rcsThrust * Time.deltaTime;
 
-        if (state == State.Alive)
+        if (state == State.Alive) //if rcket is still being controlled
         {
-            if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) //if trying to rotate in both directions
             {
                 print("Can't Rotate Both Ways at The Same Time!");
-                aKeyMaterial.color = Color.white;
-                dKeyMaterial.color = Color.white;
-
             }
-            else if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A)) //if rotating left with a (a being held down)
             {
                 transform.Rotate(Vector3.forward * rotationSpeed);
 
-                //print("Left Rotation Pressed!");
-                aKeyMaterial.color = Color.red;
-                dKeyMaterial.color = Color.white;
+                if (rightBoostParticle.isPlaying) { } //if boost particle effect is already playing do nothing, don't want to restart animation
+                else
+                {
+                    rightBoostParticle.Play(); //if not playing, play
+                }
+
+                if (leftBoostParticle.isPlaying) //if rotating one way, stop particle effect for the other rotation if its playing
+                {
+                    leftBoostParticle.Stop();
+                }
             }
             else if (Input.GetKey(KeyCode.D))
             {
+                transform.Rotate(-Vector3.forward * rotationSpeed); //apply rotation
 
-                //print("Right Rotation Pressed!");
-                dKeyMaterial.color = Color.red;
-                aKeyMaterial.color = Color.white;
+                if (leftBoostParticle.isPlaying) { } //same as above for other rotation
+                else
+                {
+                    leftBoostParticle.Play();
+                }
 
-
-
-                transform.Rotate(-Vector3.forward * rotationSpeed);
-
+                if (rightBoostParticle.isPlaying)
+                {
+                    rightBoostParticle.Stop();
+                }
             }
-            else
+            else //if no rotations, stop all sie boost particle effects if playing
             {
-                aKeyMaterial.color = Color.white;
-                dKeyMaterial.color = Color.white;
+                if (rightBoostParticle.isPlaying) { rightBoostParticle.Stop(); }
+                if (leftBoostParticle.isPlaying) { leftBoostParticle.Stop(); }
             }
         }
-        
 
-        rocketRigidBody.freezeRotation = false;
-
+        rocketRigidBody.freezeRotation = false; //unfreeze rotation once calculation is applied
     }
 
-    private void getThrust()
+    private void SetThrust()
     {
 
         float mainThrustSpeed = mainThrust * Time.deltaTime;
@@ -186,7 +185,6 @@ public class Rocket : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Space))
             {
-                //print("Space Pressed!");
                 rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
 
                 mainEngineParticle.Play();
@@ -196,15 +194,38 @@ public class Rocket : MonoBehaviour
                     audioData.PlayOneShot(mainEngineSound);
                 }
 
-                spaceKeyMaterial.color = Color.red;
             }
             else
             {
-                spaceKeyMaterial.color = Color.white;
                 mainEngineParticle.Stop();
                 audioData.Pause();
             }
         }
+    }
+
+    private void CheckDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            state = State.Trancending;
+            Invoke("LoadNextLevel", 0.05f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+
+            invincable = !invincable;
+            if (invincable)
+            {
+                print("Invincable Mode ON");
+            }
+            else
+            {
+                print("Invincable Mode OFF");
+            }
+            
+        }
+
     }
 }
 
