@@ -112,12 +112,28 @@ public class Rocket : MonoBehaviour
             state = State.Alive;
             //ControlEnabled = true;
         }
+        else if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            SceneManager.LoadScene(2);
+            state = State.Alive;
+            //ControlEnabled = true;
+        }
     }
 
     private void LoadNextLevel()
     {
-        SceneManager.LoadScene(1);
-        state = State.Alive;
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        if ((SceneManager.sceneCountInBuildSettings-1) > currentLevelIndex)
+        {
+            SceneManager.LoadScene(currentLevelIndex + 1);
+            state = State.Alive;
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+
+        }
+        
         //ControlEnabled = true;
     }
 

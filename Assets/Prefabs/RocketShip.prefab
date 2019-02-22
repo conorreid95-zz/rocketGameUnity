@@ -14375,7 +14375,7 @@ Transform:
   m_GameObject: {fileID: 624719153417253607}
   m_LocalRotation: {x: 0, y: 0.0011955198, z: 0, w: 0.9999993}
   m_LocalPosition: {x: 0, y: 3.44, z: 0}
-  m_LocalScale: {x: 1, y: 2.5, z: 1}
+  m_LocalScale: {x: 1, y: 2.5, z: 0.8}
   m_Children:
   - {fileID: 624719154160105355}
   - {fileID: 624719154040872919}
@@ -14517,7 +14517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rcsThrust: 250
-  mainThrust: 4500
+  mainThrust: 3500
   mainEngineSound: {fileID: 8300000, guid: f5094e2f58a23054797f39ea9066b331, type: 3}
   deathSound: {fileID: 8300000, guid: 463799b535355e245a1f93763a31c956, type: 3}
   victorySound: {fileID: 8300000, guid: eb506801ec4ec4948ab0c1f423115ca1, type: 3}
@@ -14541,7 +14541,7 @@ GameObject:
   - component: {fileID: 624719154040872916}
   m_Layer: 0
   m_Name: SideBooster1
-  m_TagString: Untagged
+  m_TagString: Friendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
