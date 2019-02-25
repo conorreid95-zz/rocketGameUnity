@@ -9,6 +9,7 @@ TagManager:
   - LandingPad
   - LaunchPad
   - BackgroundMusic
+  - Lever
   layers:
   - Default
   - TransparentFX

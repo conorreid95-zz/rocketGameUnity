@@ -16,6 +16,7 @@ public class Rocket : MonoBehaviour
     [SerializeField] AudioClip mainEngineSound;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip victorySound;
+    [SerializeField] AudioClip leverSound;
 
     [SerializeField] ParticleSystem mainEngineParticle;
     [SerializeField] ParticleSystem deathParticle;
@@ -79,6 +80,9 @@ public class Rocket : MonoBehaviour
                 victoryParticle.Play();
                 audioData.PlayOneShot(victorySound);
                 Invoke("LoadNextLevel", levelLoadDelay);
+                break;
+            case "Lever":
+                audioData.PlayOneShot(leverSound);
                 break;
             default:
                 if (invincable)
@@ -223,7 +227,7 @@ public class Rocket : MonoBehaviour
             else
             {
                 mainEngineParticle.Stop();
-                audioData.Pause();
+                audioData.Stop(); //stop better that pause
             }
         }
     }

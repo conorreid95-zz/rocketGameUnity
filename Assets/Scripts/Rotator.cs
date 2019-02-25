@@ -5,9 +5,10 @@ using UnityEngine;
 public class Rotator : MonoBehaviour
 {
     [SerializeField] float rotationSpeedPerSecond;
-    [SerializeField] bool rotationEnabled = true;
+    public bool rotationEnabled = true;
     [SerializeField] Vector3 rotateAroundPoint;
-     
+    [SerializeField] Vector3 rotateDirection;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +20,7 @@ public class Rotator : MonoBehaviour
     {
         if (rotationEnabled)
         {
-            transform.RotateAround(rotateAroundPoint, Vector3.back, Time.deltaTime * rotationSpeedPerSecond);
+            transform.RotateAround(rotateAroundPoint, rotateDirection, Time.deltaTime * rotationSpeedPerSecond);
         }
         else
         {

@@ -14359,9 +14359,10 @@ GameObject:
   - component: {fileID: 624719153417253605}
   - component: {fileID: 4435842958287744496}
   - component: {fileID: 299899359}
+  - component: {fileID: 1625598289}
   m_Layer: 0
   m_Name: RocketShip
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14375,12 +14376,12 @@ Transform:
   m_GameObject: {fileID: 624719153417253607}
   m_LocalRotation: {x: 0, y: 0.0011955198, z: 0, w: 0.9999993}
   m_LocalPosition: {x: 0, y: 3.44, z: 0}
-  m_LocalScale: {x: 1, y: 2.5, z: 0.8}
+  m_LocalScale: {x: 1, y: 2.5000024, z: 0.8000012}
   m_Children:
   - {fileID: 624719154160105355}
+  - {fileID: 624719154727817353}
   - {fileID: 624719154040872919}
   - {fileID: 624719154284473286}
-  - {fileID: 624719154727817353}
   - {fileID: 426193301}
   - {fileID: 2104134960}
   - {fileID: 4940884580851705}
@@ -14407,7 +14408,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 56
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!82 &4435842958287744496
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14521,12 +14522,26 @@ MonoBehaviour:
   mainEngineSound: {fileID: 8300000, guid: f5094e2f58a23054797f39ea9066b331, type: 3}
   deathSound: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
   victorySound: {fileID: 8300000, guid: eb506801ec4ec4948ab0c1f423115ca1, type: 3}
+  leverSound: {fileID: 8300000, guid: 137fcca51682b46338da6e7c39f987fa, type: 3}
   mainEngineParticle: {fileID: 198100719169328561}
   deathParticle: {fileID: 198204746567432620}
   victoryParticle: {fileID: 198631065191360108}
   rightBoostParticle: {fileID: 505149852}
   leftBoostParticle: {fileID: 6038900203012365986}
   gravity: {fileID: 0}
+--- !u!114 &1625598289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624719153417253607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70acb2ebb1b724b45bc62df913bde8e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RotationSpeed: 0.5
 --- !u!1 &624719154040872918
 GameObject:
   m_ObjectHideFlags: 0
@@ -14558,7 +14573,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 624719153417253604}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &624719154040872914
 MeshFilter:
@@ -14740,7 +14755,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 624719153417253604}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &624719154284473285
 MeshFilter:
@@ -14831,7 +14846,7 @@ Transform:
   m_LocalScale: {x: 0.9656618, y: 0.5966804, z: 1}
   m_Children: []
   m_Father: {fileID: 624719153417253604}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &624719154727817364
 MeshFilter:
