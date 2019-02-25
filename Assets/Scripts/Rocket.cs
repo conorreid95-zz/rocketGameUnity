@@ -55,6 +55,11 @@ public class Rocket : MonoBehaviour
         CheckDebugKeys();
         SetThrust();
         SetRotation();
+
+        if(Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
     }
 
 
@@ -100,7 +105,8 @@ public class Rocket : MonoBehaviour
 
     private void LoadCurrentLevel()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        /*if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             SceneManager.LoadScene(0);
             state = State.Alive;
@@ -117,7 +123,7 @@ public class Rocket : MonoBehaviour
             SceneManager.LoadScene(2);
             state = State.Alive;
             //ControlEnabled = true;
-        }
+        } */
     }
 
     private void LoadNextLevel()
@@ -142,8 +148,7 @@ public class Rocket : MonoBehaviour
     private void SetRotation()
     {
 
-        rocketRigidBody.freezeRotation = true; //freeze rotation before applying calculated rotation
-
+        
         float rotationSpeed = rcsThrust * Time.deltaTime;
 
         if (state == State.Alive) //if rcket is still being controlled
@@ -154,7 +159,9 @@ public class Rocket : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.A)) //if rotating left with a (a being held down)
             {
+                rocketRigidBody.freezeRotation = true; //freeze rotation before applying calculated rotation
                 transform.Rotate(Vector3.forward * rotationSpeed);
+                rocketRigidBody.freezeRotation = false;   //unfreeze rotation once calculation is applied
 
                 if (rightBoostParticle.isPlaying) { } //if boost particle effect is already playing do nothing, don't want to restart animation
                 else
@@ -169,7 +176,9 @@ public class Rocket : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.D))
             {
+                rocketRigidBody.freezeRotation = true; //freeze rotation before applying calculated rotation
                 transform.Rotate(-Vector3.forward * rotationSpeed); //apply rotation
+                rocketRigidBody.freezeRotation = false;   //unfreeze rotation once calculation is applied
 
                 if (leftBoostParticle.isPlaying) { } //same as above for other rotation
                 else
@@ -189,7 +198,7 @@ public class Rocket : MonoBehaviour
             }
         }
 
-        rocketRigidBody.freezeRotation = false; //unfreeze rotation once calculation is applied
+        
     }
 
     private void SetThrust()

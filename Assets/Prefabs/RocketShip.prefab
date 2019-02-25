@@ -89,7 +89,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
-  m_Height: 2
+  m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &515635693
@@ -250,7 +250,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
-  m_Height: 2
+  m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &1113205329686789
@@ -14519,7 +14519,7 @@ MonoBehaviour:
   rcsThrust: 250
   mainThrust: 3500
   mainEngineSound: {fileID: 8300000, guid: f5094e2f58a23054797f39ea9066b331, type: 3}
-  deathSound: {fileID: 8300000, guid: 463799b535355e245a1f93763a31c956, type: 3}
+  deathSound: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
   victorySound: {fileID: 8300000, guid: eb506801ec4ec4948ab0c1f423115ca1, type: 3}
   mainEngineParticle: {fileID: 198100719169328561}
   deathParticle: {fileID: 198204746567432620}
@@ -14811,7 +14811,7 @@ GameObject:
   - component: {fileID: 624719154727817353}
   - component: {fileID: 624719154727817364}
   - component: {fileID: 624719154727817367}
-  - component: {fileID: 624719154727817366}
+  - component: {fileID: 5543778145584665685}
   m_Layer: 0
   m_Name: Nose Cone
   m_TagString: Untagged
@@ -14878,8 +14878,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &624719154727817366
-SphereCollider:
+--- !u!136 &5543778145584665685
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -14888,8 +14888,9 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.46
+  m_Height: 0.99999994
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &523626076
 PrefabInstance:
@@ -14901,6 +14902,18 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_Name
       value: SideBoostSmokeRight
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14950,18 +14963,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.05
       objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 27
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
 --- !u!4 &523500764 stripped
@@ -14986,6 +14987,18 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_Name
       value: SideBoostSmokeLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15034,18 +15047,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 27
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
