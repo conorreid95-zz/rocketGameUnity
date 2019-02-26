@@ -19,6 +19,7 @@ public class Rocket : MonoBehaviour
     [SerializeField] AudioClip leverSound;
 
     [SerializeField] ParticleSystem mainEngineParticle;
+    [SerializeField] ParticleSystem mainEngineLight;
     [SerializeField] ParticleSystem deathParticle;
     [SerializeField] ParticleSystem victoryParticle;
     [SerializeField] ParticleSystem rightBoostParticle;
@@ -215,6 +216,7 @@ public class Rocket : MonoBehaviour
                 rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
 
                 mainEngineParticle.Play();
+                mainEngineLight.Play();
 
                 if (!audioData.isPlaying)
                 {
@@ -225,6 +227,7 @@ public class Rocket : MonoBehaviour
             else
             {
                 mainEngineParticle.Stop();
+                mainEngineLight.Stop();
                 audioData.Stop(); //stop better that pause
             }
         }
