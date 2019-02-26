@@ -39,6 +39,10 @@ public class Rocket : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 60;
+
+        Cursor.visible = false;
+
         rocketRigidBody = GetComponent<Rigidbody>();
 
         audioData = GetComponent<AudioSource>();
@@ -57,7 +61,7 @@ public class Rocket : MonoBehaviour
         SetThrust();
         SetRotation();
 
-        if(Input.GetKey("escape"))
+        if(Input.GetKey("escape") || Input.GetKey(KeyCode.Q))
         {
             Application.Quit();
         }
@@ -110,24 +114,7 @@ public class Rocket : MonoBehaviour
     private void LoadCurrentLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        /*if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            SceneManager.LoadScene(0);
-            state = State.Alive;
-            // ControlEnabled = true;
-        }
-        else if (SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            SceneManager.LoadScene(1);
-            state = State.Alive;
-            //ControlEnabled = true;
-        }
-        else if (SceneManager.GetActiveScene().buildIndex == 2)
-        {
-            SceneManager.LoadScene(2);
-            state = State.Alive;
-            //ControlEnabled = true;
-        } */
+       
     }
 
     private void LoadNextLevel()
@@ -144,7 +131,6 @@ public class Rocket : MonoBehaviour
 
         }
         
-        //ControlEnabled = true;
     }
 
 
@@ -161,7 +147,19 @@ public class Rocket : MonoBehaviour
             {
                 print("Can't Rotate Both Ways at The Same Time!");
             }
-            else if (Input.GetKey(KeyCode.A)) //if rotating left with a (a being held down)
+            else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.RightArrow)) //if trying to rotate in both directions
+            {
+                print("Can't Rotate Both Ways at The Same Time!");
+            }
+            else if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.LeftArrow)) //if trying to rotate in both directions
+            {
+                print("Can't Rotate Both Ways at The Same Time!");
+            }
+            else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow)) //if trying to rotate in both directions
+            {
+                print("Can't Rotate Both Ways at The Same Time!");
+            }
+            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) //if rotating left with a (a being held down)
             {
                 rocketRigidBody.freezeRotation = true; //freeze rotation before applying calculated rotation
                 transform.Rotate(Vector3.forward * rotationSpeed);
@@ -178,7 +176,7 @@ public class Rocket : MonoBehaviour
                     leftBoostParticle.Stop();
                 }
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 rocketRigidBody.freezeRotation = true; //freeze rotation before applying calculated rotation
                 transform.Rotate(-Vector3.forward * rotationSpeed); //apply rotation
@@ -212,7 +210,7 @@ public class Rocket : MonoBehaviour
 
         if (state == State.Alive)
         {
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse0))
             {
                 rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
 
