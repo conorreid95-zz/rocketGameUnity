@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class LeverBehaviour : MonoBehaviour
 {
-    GameObject slidingWall;    
+    GameObject slidingWall;
+
+    [SerializeField] AudioClip leverSound;
+    AudioSource audioData;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        audioData = GetComponent<AudioSource>();
+
         try
         {
             slidingWall = GameObject.Find("slidingWall");
@@ -36,6 +43,11 @@ public class LeverBehaviour : MonoBehaviour
                 print("Wall ENABLED");
                 Behaviour halo = (Behaviour)GetComponent("Halo");
                 halo.enabled = false;
+
+                Destroy(GetComponent<BoxCollider>());
+                Destroy(GetComponent<MeshRenderer>());
+
+                audioData.PlayOneShot(leverSound);
                 break;
             default:
                 break;

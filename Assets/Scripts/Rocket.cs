@@ -10,8 +10,8 @@ public class Rocket : MonoBehaviour
 
     AudioSource audioData;
 
-    [SerializeField] float rcsThrust = 250f;
-    [SerializeField] float mainThrust = 4200f;
+    public float rcsThrust = 280f;
+    public float mainThrust = 3500f;
 
     [SerializeField] AudioClip mainEngineSound;
     [SerializeField] AudioClip deathSound;
@@ -40,7 +40,7 @@ public class Rocket : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 120;
 
         Cursor.visible = false;
 
