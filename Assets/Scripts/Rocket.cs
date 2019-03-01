@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
+    GameObject rightBooster;
+    GameObject leftBooster;
+    GameObject body2;
+    GameObject noseCone;
+
     Rigidbody rocketRigidBody;
 
     AudioSource audioData;
@@ -40,6 +45,11 @@ public class Rocket : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rightBooster = GameObject.Find("SideBooster1");
+        leftBooster = GameObject.Find("SideBooster2");
+        body2 = GameObject.Find("Body2");
+        noseCone = GameObject.Find("NoseCone");
+
         Application.targetFrameRate = 120;
 
         Cursor.visible = false;
@@ -99,6 +109,18 @@ public class Rocket : MonoBehaviour
                     state = State.Dying;
                     audioData.Stop();
                     deathParticle.Play();
+
+                    body2.transform.parent = null;
+                    body2.AddComponent<Rigidbody>();
+
+                    rightBooster.transform.parent = null;
+                    rightBooster.AddComponent<Rigidbody>();
+
+                    leftBooster.transform.parent = null;
+                    leftBooster.AddComponent<Rigidbody>();
+
+                    noseCone.transform.parent = null;
+                    noseCone.AddComponent<Rigidbody>();
 
                     if (rightBoostParticle.isPlaying) { rightBoostParticle.Stop(); }
                     if (leftBoostParticle.isPlaying) { leftBoostParticle.Stop(); }
@@ -215,7 +237,13 @@ public class Rocket : MonoBehaviour
             {
                 rocketRigidBody.AddRelativeForce(Vector3.up * mainThrustSpeed);
 
-                mainEngineParticle.Play();
+                if (!mainEngineParticle.isPlaying)
+                {
+                    mainEngineParticle.Play();
+                }
+
+            
+
                 mainEngineLight.Play();
 
                 if (!audioData.isPlaying)

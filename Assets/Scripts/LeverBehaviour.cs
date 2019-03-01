@@ -33,9 +33,9 @@ public class LeverBehaviour : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision) //executes on collision with another gameobject
+    private void OnTriggerEnter(Collider other)
     {
-        switch (collision.gameObject.tag) //switch on tag of object the rocket has collided with
+        switch (other.gameObject.tag) //switch on tag of object the rocket has collided with
         {
             case "Player":
                 print("Touched by rocket");
@@ -52,7 +52,5 @@ public class LeverBehaviour : MonoBehaviour
             default:
                 break;
         }
-        
-
     }
 }
