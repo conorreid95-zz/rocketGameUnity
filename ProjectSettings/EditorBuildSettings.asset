@@ -6,33 +6,42 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Levels/0_EditRocket 1.unity
+    guid: 2c1b58b2143ae774588c28b4d89a7b3b
+  - enabled: 1
     path: Assets/Levels/1_IntroLevel.unity
     guid: e54838ec81c3cab419904c1a8fdbf1f8
   - enabled: 1
-    path: Assets/Levels/2_PillarSwing.unity
+    path: Assets/Levels/2_EasySecond.unity
+    guid: 4a5298264108a61409479e7cd21ad458
+  - enabled: 1
+    path: Assets/Levels/3_EasyThird.unity
+    guid: b1e3e981eb6b9f0489f41ef12525e0ee
+  - enabled: 1
+    path: Assets/Levels/4_PillarSwing.unity
     guid: 4e8b05d330a6fa14787547d21563a231
   - enabled: 1
-    path: Assets/Levels/3_UpAndDown.unity
-    guid: bf56b309b3a15ad44a7273b848680308
-  - enabled: 1
-    path: Assets/Levels/4_StairClimb.unity
+    path: Assets/Levels/5_StairClimb.unity
     guid: 2f8de1060cf111e4d99e469377bb4c2b
   - enabled: 1
-    path: Assets/Levels/5_RoundTheCircle.unity
+    path: Assets/Levels/6_RoundTheCircle.unity
     guid: b2fd57c43a630e443aaa6915103a884b
   - enabled: 1
-    path: Assets/Levels/6_HighJump.unity
+    path: Assets/Levels/7_UpAndDown.unity
+    guid: bf56b309b3a15ad44a7273b848680308
+  - enabled: 1
+    path: Assets/Levels/8_HighJump.unity
     guid: 15393ec61cf6aae4796c140d187340b0
   - enabled: 1
-    path: Assets/Levels/7_ClosingWalls.unity
+    path: Assets/Levels/9_ClosingWalls.unity
     guid: 3299f15e5939b6142bbcf6f83e5d10b2
   - enabled: 1
-    path: Assets/Levels/8_SlidingWall.unity
+    path: Assets/Levels/10_SlidingWall.unity
     guid: 90912d2540f204b4d8c2eefb53efb525
   - enabled: 1
-    path: Assets/Levels/9_ShrinkGap.unity
+    path: Assets/Levels/11_ShrinkGap.unity
     guid: 5872f1a614293574b901bc342f7480d3
   - enabled: 1
-    path: Assets/Levels/10_BigLevel.unity
+    path: Assets/Levels/12_BigLevel.unity
     guid: 21c1540cc4530814fb8ec98b7a6151fb
   m_configObjects: {}

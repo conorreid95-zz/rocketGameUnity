@@ -119,8 +119,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401606483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.196, z: 0}
-  m_LocalScale: {x: 1, y: 0.6, z: 1}
+  m_LocalPosition: {x: 0, y: -0.1981, z: 0}
+  m_LocalScale: {x: 1, y: 0.5958, z: 1}
   m_Children: []
   m_Father: {fileID: 624719153417253604}
   m_RootOrder: 11
@@ -5150,6 +5150,7 @@ MonoBehaviour:
   mainEngineSound: {fileID: 8300000, guid: f5094e2f58a23054797f39ea9066b331, type: 3}
   deathSound: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
   victorySound: {fileID: 8300000, guid: eb506801ec4ec4948ab0c1f423115ca1, type: 3}
+  victorySoundLast: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
   leverSound: {fileID: 8300000, guid: 137fcca51682b46338da6e7c39f987fa, type: 3}
   mainEngineParticle: {fileID: 6323233117752118469}
   mainEngineLight: {fileID: 3031092483234096959}
@@ -5573,6 +5574,10 @@ PrefabInstance:
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 27
       objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.56816643
@@ -5714,16 +5719,6 @@ PrefabInstance:
       propertyPath: moveWithTransform
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 198805160044956896, guid: e1b08032bec16ba4eb1ae23cbd572664,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198918736123329914, guid: e1b08032bec16ba4eb1ae23cbd572664,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 198003277540838118, guid: e1b08032bec16ba4eb1ae23cbd572664,
         type: 3}
       propertyPath: playOnAwake
@@ -5734,12 +5729,22 @@ PrefabInstance:
       propertyPath: SubModule.subEmitters.Array.data[0].emitter
       value: 
       objectReference: {fileID: 198751836016360436}
+    - target: {fileID: 198166025632870074, guid: e1b08032bec16ba4eb1ae23cbd572664,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 198604367962915600, guid: e1b08032bec16ba4eb1ae23cbd572664,
         type: 3}
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 198166025632870074, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    - target: {fileID: 198805160044956896, guid: e1b08032bec16ba4eb1ae23cbd572664,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198918736123329914, guid: e1b08032bec16ba4eb1ae23cbd572664,
         type: 3}
       propertyPath: playOnAwake
       value: 0
@@ -5902,6 +5907,10 @@ PrefabInstance:
     - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18e3f775a923c284489698691cebfed3, type: 3}
       propertyPath: m_LocalPosition.x

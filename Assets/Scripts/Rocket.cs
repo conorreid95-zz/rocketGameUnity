@@ -11,6 +11,10 @@ public class Rocket : MonoBehaviour
     GameObject body2;
     GameObject noseCone;
 
+    GameObject universeMusic;
+
+    GameObject gameController;
+
     Rigidbody rocketRigidBody;
 
     AudioSource audioData;
@@ -21,6 +25,7 @@ public class Rocket : MonoBehaviour
     [SerializeField] AudioClip mainEngineSound;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip victorySound;
+    [SerializeField] AudioClip victorySoundLast;
     [SerializeField] AudioClip leverSound;
 
     [SerializeField] ParticleSystem mainEngineParticle;
@@ -29,6 +34,9 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem victoryParticle;
     [SerializeField] ParticleSystem rightBoostParticle;
     [SerializeField] ParticleSystem leftBoostParticle;
+
+    GameObject embers;
+    GameObject bigExplosion;
 
     public ConstantForce gravity;
 
@@ -40,6 +48,8 @@ public class Rocket : MonoBehaviour
 
     bool invincable = false;
 
+    int currentSceneIndex;
+
     //bool ControlEnabled = true;
 
     // Start is called before the first frame update
@@ -50,9 +60,23 @@ public class Rocket : MonoBehaviour
         body2 = GameObject.Find("Body2");
         noseCone = GameObject.Find("NoseCone");
 
+        embers = GameObject.Find("FireEmbers (3)");
+        bigExplosion = GameObject.Find("BigExplosion");
+
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        gameController = GameObject.Find("GameController");
+
         Application.targetFrameRate = 120;
 
-        Cursor.visible = false;
+        if (currentSceneIndex > 0)
+        {
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.visible = true;
+        }
 
         rocketRigidBody = GetComponent<Rigidbody>();
 
@@ -71,13 +95,8 @@ public class Rocket : MonoBehaviour
         CheckDebugKeys();
         SetThrust();
         SetRotation();
-
-        if(Input.GetKey("escape") || Input.GetKey(KeyCode.Q))
-        {
-            Application.Quit();
-        }
+        
     }
-
 
     private void OnCollisionEnter(Collision collision) //executes on collision with another gameobject
     {
@@ -96,6 +115,13 @@ public class Rocket : MonoBehaviour
                 audioData.PlayOneShot(victorySound);
                 Invoke("LoadNextLevel", levelLoadDelay);
                 break;
+            case "LandingPadLast":
+                state = State.Trancending;
+                audioData.Stop();
+                victoryParticle.Play();
+                audioData.PlayOneShot(victorySoundLast);
+                Invoke("LoadMenuLevel", 3f);
+                break;
             case "Lever":
                 audioData.PlayOneShot(leverSound);
                 break;
@@ -110,17 +136,13 @@ public class Rocket : MonoBehaviour
                     audioData.Stop();
                     deathParticle.Play();
 
-                    body2.transform.parent = null;
-                    body2.AddComponent<Rigidbody>();
+                    if (gameController != null)
+                    {
+                        gameController.GetComponent<ScoreTracker>().deathCount++;
+                        print(gameController.GetComponent<ScoreTracker>().deathCount);
+                    }
 
-                    rightBooster.transform.parent = null;
-                    rightBooster.AddComponent<Rigidbody>();
-
-                    leftBooster.transform.parent = null;
-                    leftBooster.AddComponent<Rigidbody>();
-
-                    noseCone.transform.parent = null;
-                    noseCone.AddComponent<Rigidbody>();
+                    DetaachRocketObjects(); //function makes rocket boosters and body detach to simulate explosion
 
                     if (rightBoostParticle.isPlaying) { rightBoostParticle.Stop(); }
                     if (leftBoostParticle.isPlaying) { leftBoostParticle.Stop(); }
@@ -134,34 +156,72 @@ public class Rocket : MonoBehaviour
 
     }
 
+    private void DetaachRocketObjects()
+    {
+        body2.transform.parent = null;
+        body2.AddComponent<Rigidbody>();
+        body2.GetComponent<Rigidbody>().AddExplosionForce(2000f, body2.transform.localPosition, 20f, 20f);
+
+        rightBooster.transform.parent = null;
+        rightBooster.AddComponent<Rigidbody>();
+
+        leftBooster.transform.parent = null;
+        leftBooster.AddComponent<Rigidbody>();
+
+        noseCone.transform.parent = null;
+        noseCone.AddComponent<Rigidbody>();
+        //noseCone.GetComponent<Rigidbody>().AddForce(transform.right * 50f);
+
+
+        embers.transform.parent = null;
+        bigExplosion.transform.parent = null;
+    }
+
     private void LoadCurrentLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(currentSceneIndex);
        
+    }
+
+    private void LoadMenuLevel()
+    {
+        try
+        {
+            universeMusic = GameObject.Find("Universe Music");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        
+        if (universeMusic.GetComponent<AudioSource>().isPlaying)
+        {
+            Destroy(universeMusic);
+        }
+        SceneManager.LoadScene(0);
+        state = State.Alive;
+     
     }
 
     private void LoadNextLevel()
     {
-        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        if ((SceneManager.sceneCountInBuildSettings-1) > currentLevelIndex)
+        
+        if ((SceneManager.sceneCountInBuildSettings - 1) > currentSceneIndex)
         {
-            SceneManager.LoadScene(currentLevelIndex + 1);
+            SceneManager.LoadScene(currentSceneIndex + 1);
             state = State.Alive;
         }
         else
         {
             SceneManager.LoadScene(0);
-
         }
-        
+
     }
 
 
 
     private void SetRotation()
     {
-
-        
         float rotationSpeed = rcsThrust * Time.deltaTime;
 
         if (state == State.Alive) //if rcket is still being controlled
@@ -169,6 +229,9 @@ public class Rocket : MonoBehaviour
             if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) //if trying to rotate in both directions
             {
                 print("Can't Rotate Both Ways at The Same Time!");
+                if (rightBoostParticle.isPlaying) { rightBoostParticle.Stop(); }
+                if (leftBoostParticle.isPlaying) { leftBoostParticle.Stop(); }
+
             }
             else if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.RightArrow)) //if trying to rotate in both directions
             {
@@ -231,7 +294,7 @@ public class Rocket : MonoBehaviour
 
         float mainThrustSpeed = mainThrust * Time.deltaTime;
 
-        if (state == State.Alive)
+        if (state == State.Alive && currentSceneIndex != 0)
         {
             if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse0))
             {
@@ -241,10 +304,10 @@ public class Rocket : MonoBehaviour
                 {
                     mainEngineParticle.Play();
                 }
-
-            
-
-                mainEngineLight.Play();
+                if (!mainEngineLight.isPlaying)
+                {
+                    mainEngineLight.Play();
+                }
 
                 if (!audioData.isPlaying)
                 {
@@ -263,6 +326,11 @@ public class Rocket : MonoBehaviour
 
     private void CheckDebugKeys()
     {
+        if (Input.GetKey("escape") || Input.GetKey(KeyCode.Q))
+        {
+            LoadMenuLevel();
+        }
+
         if (Input.GetKeyDown(KeyCode.L))
         {
             state = State.Trancending;
